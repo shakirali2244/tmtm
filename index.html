@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="boot.css">
+</head>
+<body>
+<div class="col-md-1"> 
+<h1>hello</h1>
+</div>
+<div class="col-md-1"> <h1 id="dist"></h6></div>
+<div class="col-md-1"> <h1 id="time"></h6></div>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+var socket = io().connect('http://192.168.0.17');;
+socket.on('dist',function(data){
+var display_this=data;
+document.getElementById("dist").innerHTML = display_this;
+});
+socket.on('time',function(data){
+var display_this=data;
+document.getElementById("time").innerHTML = display_this;
+});
+setInterval(function(){
+	socket.emit('req','blah');
+},100);
+</script>
+</body>
+</html>
