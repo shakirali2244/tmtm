@@ -6,7 +6,8 @@
   "dependencies": {
     "express": "^4.13.1",
     "r-pi-usonic": "^2.4.1",
-    "socket.io": "^1.3.5"
+    "socket.io": "^1.3.5",
+    "socket.io-client": "^1.3.5"
   },
   "devDependencies": {},
   "scripts": {

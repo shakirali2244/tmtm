@@ -4,9 +4,8 @@ var io = require('socket.io')(server);
 var usonic = require('r-pi-usonic');
 var sensor1 = usonic.createSensor(19, 26);
 
+server.listen(3000);
 
-server.listen(80);
-var child_process = require('child_process');
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname+'/index.html')
@@ -15,10 +14,25 @@ app.get('/', function (req, res) {
 app.get('/boot.css', function (req, res) {
   res.sendFile(__dirname+'/boot.css')
 });
+
 var start = new Date().getTime();
 console.log(start - start);
-io.on('connection', function(socket){
+
+
+io.sockets.on('connection', function(socket){
+  setInterval(function(){
+    io.sockets.emit('time',new Date().getTime()-start);
+  },100)
+  
   console.log('a user connected');
+  socket.on('trig1',function(data){
+  console.log(data);
+  io.sockets.emit('time',new Date().getTime()-start);
+  console.log(new Date().getTime()-start)
+  start = new Date().getTime();
+});
+
+  /*
   socket.emit('time',new Date().getTime()-start);
   socket.on('req',function(data){
   	var dist1 = sensor1();
@@ -31,7 +45,9 @@ io.on('connection', function(socket){
   		start = new Date().getTime();
   	}
 	
-  	});
+  	});*/
+
 });
+
 
 

@@ -4,30 +4,38 @@
 <link rel="stylesheet" type="text/css" href="boot.css">
 </head>
 <body>
-<div class="col-md-1"> 
-<h1>hello</h1>
-</div>
-<row>
-<div class="col-md-1"> <h1 id="dist"></h6></div>
-</row>
-<row>
-<div class="col-md-1"> <h1 id="time"></h6></div>
-</row>
+	<row>
+	<div class="col-md-4"> 
+		<h1>Time Since "last movement": </h1>
+	</div>
+	<div class="col-md-4">
+		<h1 id="time"></h1>
+	</div>
+	</row>
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
-var socket = io().connect('http://192.168.0.17');;
+var socket = io().connect('http://sfuarduinoclub.privatedns.org:3000');
 socket.on('dist',function(data){
 var display_this=data;
 document.getElementById("dist").innerHTML = display_this;
 });
 socket.on('time',function(data){
-var display_this=data;
-document.getElementById("time").innerHTML = display_this;
+var display_this=Math.round(data/1000);
+document.getElementById("time").innerHTML = String(display_this).toHHMMSS();
 });
-setInterval(function(){
-	socket.emit('req','blah');
-},100);
+String.prototype.toHHMMSS = function () {
+    var sec_num = parseInt(this, 10); // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    var time    = hours+':'+minutes+':'+seconds;
+    return time;
+}
 </script>
 </body>
 </html>
